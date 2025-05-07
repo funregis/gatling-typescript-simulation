@@ -1,0 +1,36 @@
+{
+  "name": "gatling",
+  "version": "1.0",
+  "private": true,
+  "type": "module",
+  "main": "target/bundle",
+  "dependencies": {
+    "@gatling.io/core": "3.13.501",
+    "@gatling.io/http": "3.13.501",
+    "node-fetch": "3"
+  },
+  "devDependencies": {
+    "@gatling.io/cli": "3.13.501",
+    "@types/node": "22.15.3",
+    "prettier": "3.5.3",
+    "rimraf": "6.0.1",
+    "typescript": "5.8.3"
+  },
+  "scripts": {
+    "clean": "rimraf target",
+    "format": "prettier --write \"**/*.ts\"",
+    "get-user-state": "node javascript/UserStateFetcher.js",
+    "get-user-state-dev": "npm run get-user-state dev",
+    "get-user-state-uat": "npm run get-user-state uat",
+    "get-user-state-preprod": "npm run get-user-state preprod",
+    "check": "tsc --noEmit",
+    "clean-user-state" : "node javascript/ResetUserStateFileHandler.js",
+    "build-gatling": "gatling build --typescript",
+    "build-js" : "npx tsc -p tsconfig.config.json",
+    "recorder": "gatling recorder --typescript",
+    "run-scenario": "gatling run --typescript --simulation SimulationDossier",
+    "run-scenario-dev": "npm run build-js && npm run build-gatling && npm runget-user-state dev && npm run run-scenario env=dev",
+    "run-scenario-uat": "npm run build-js && npm run build-gatling && npm run get-user-state uat && npm run run-scenario env=uat",
+    "run-scenario-preprod": "npm run build-js && npm run build-gatling && npm run get-user-state preprod && npm run run-scenario env=preprod && npm run clean-user-state"
+  }
+}
